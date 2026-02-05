@@ -4,9 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -15,18 +13,12 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module",
+  "type": "commonjs",
   "bugs": {
     "url": "https://github.com/LORN-Hongnida/button-counter/issues"
   },
   "homepage": "https://github.com/LORN-Hongnida/button-counter#readme",
   "devDependencies": {
-    "@types/node": "^25.2.0",
-    "dotenv": "^17.2.3",
-    "typescript": "^5.9.3",
-    "vite": "^7.3.1"
-  },
-  "dependencies": {
-    "@libsql/client": "^0.17.0"
+    "typescript": "^5.9.3"
   }
 }
