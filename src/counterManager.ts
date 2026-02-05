@@ -3,7 +3,8 @@ import { getCounter, updateCounter } from "./db.js";
 const POLL_INTERVAL = 500; // Check for updates every 500ms
 
 let currentCounterValue = 0;
-let pollIntervalId: NodeJS.Timeout | null = null;
+let pollTimeoutId: NodeJS.Timeout | null = null;
+let isPolling = false;
 
 function isNumber(value: any): value is number {
     return typeof value === 'number';
@@ -54,10 +55,12 @@ export function setupButtonListener(
 }
 
 export async function startRealTimePolling(counterDisplay: HTMLParagraphElement | null) {
-    // Prevent multiple intervals from running at once
-    if (pollIntervalId) return;
+    // Prevent multiple polling sessions from running at once
+    if (isPolling) return;
+    
+    isPolling = true;
 
-    pollIntervalId = setInterval(async () => {
+    const pollOnce = async () => {
         try {
             const latestValue = await getCounter();
             // Compare and update only if it's a valid number and has changed
@@ -69,12 +72,21 @@ export async function startRealTimePolling(counterDisplay: HTMLParagraphElement 
         } catch (error) {
             console.error("Error polling for updates:", error);
         }
-    }, POLL_INTERVAL);
+
+        // Schedule the next poll
+        if (isPolling) {
+            pollTimeoutId = setTimeout(pollOnce, POLL_INTERVAL);
+        }
+    };
+
+    // Start the first poll
+    pollTimeoutId = setTimeout(pollOnce, POLL_INTERVAL);
 }
 
 export function stopRealTimePolling() {
-    if (pollIntervalId !== null) {
-        clearInterval(pollIntervalId);
-        pollIntervalId = null;
+    isPolling = false;
+    if (pollTimeoutId !== null) {
+        clearTimeout(pollTimeoutId);
+        pollTimeoutId = null;
     }
 }
