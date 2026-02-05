@@ -11,18 +11,36 @@ Ensure that you have these prerequisites installed and set up on your computer:
   
 ### 1. Cloning the repository:
 ```bash
-git clone https://github.com/LORN-Hongnida/button-counter.git"
+git clone https://github.com/LORN-Hongnida/button-counter.git
 cd button-counter
 ```
 ### 2. Installing the repository:
 ```bash
 npm install
 ```
-### 3. Compiling the TypeScript files:
+### 3. Compiling the TypeScript files (Optional):
 ```bash
 npx tsc
 ```
-### 
+It's okay if you skip this step, this is only for checking if there is any errors in the code.
+We will use Step 5 to run our app on your browser.
+### 4. Configuring the .env file:
+- For Windows Users:
+```bash
+copy .env.example .env
+```
+- For MacOS/Linux Users:
+```bash
+cp .env.example .env
+```
+After you run the command, input your database URL and Auth Token into your .env file. 
+(If you are my teammates, I have provided our team's Turso DB URL and Auth Token).
 
-I am still setting up the database so I will add more to this .README on how to run. Thanks!!
+### 5. Running the app:
+```bash
+npm run dev
+```
+After that your code should run on http://localhost:5173
+
+
 
