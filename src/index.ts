@@ -1,29 +1,22 @@
-﻿import { getCounter, updateCounter } from "./db.js";
+﻿import {initCounter, setupButtonListener, startRealTimePolling, stopRealTimePolling } from "./counterManager.js";
 
 const counterBtn = document.getElementById('counter-btn') as HTMLButtonElement;
 const counterDisplay = document.getElementById('counter-value') as HTMLParagraphElement;
 
-async function initCounter() {
-    console.log("Initializing counter...");
-    const current = await getCounter();
-    if (counterDisplay) {
-        counterDisplay.textContent = (current ?? 0).toString();
+// Pause polling when page is hidden, resume when visible
+document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+        stopRealTimePolling();
+    } else {
+        startRealTimePolling(counterDisplay);
     }
+});
+
+// Initialize the app
+async function initApp() {
+    await initCounter(counterDisplay);
+    setupButtonListener(counterBtn, counterDisplay);
+    startRealTimePolling(counterDisplay);
 }
 
-async function updateCounterValue() {
-    if (counterBtn) {
-        counterBtn.addEventListener('click', async () => {
-            console.log("Button clicked!");
-            const newValue = await updateCounter();
-            if (counterDisplay) {
-                // updateCounter returns the new value, so we use it directly
-                // if it's null, we fetch the current value as a fallback
-                counterDisplay.textContent = (newValue ?? await getCounter() ?? 0).toString();
-            }
-        });
-    }
-}
-
-initCounter();
-updateCounterValue();
+initApp();
